@@ -1,0 +1,25 @@
+syntax="proto3";
+package fixbug;
+//这个文件是用户自己定义的 调用请求端和服务器端有同一个要求
+option cc_generic_services = true;
+message ResultCode
+{
+    int32 errcode=1;
+    bytes errmsg=2;
+}
+message GetFriendsListRequest
+{
+    uint32 userid=1;
+}
+
+message GetFriendsListResponse
+{
+    ResultCode result=1;
+    repeated bytes friends=2;//列表 
+}
+//好友模块
+service FriendServiceRpc
+{
+    rpc GetFriendsList(GetFriendsListRequest) returns(GetFriendsListResponse);
+    
+}

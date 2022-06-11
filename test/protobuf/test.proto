@@ -1,0 +1,52 @@
+syntax="proto3";//声明了代码
+package fixbug;//声明代码所在的包 （对于C++来说是namespece)
+//数据 列表 映射表
+//定义登陆消息类型 name pwd
+//定义下面的选喜爱嗯，表示生成service服务类和rpc方法描述 默认不生成
+option cc_generic_services=true;
+message ResultCode//每个响应都要写errorcode和errmsg 封装起来
+{
+    int32 errorcode=1;//对应C++里面的4字节整数
+    bytes errmsg=2;
+}
+message LoginRequest
+{
+    bytes name = 1;//string 一般定义成bytes
+    bytes pwd =2;       
+    //map<int32,string>test=3; //使用起来 转换到C++的语言可能跟哈系表的使用是一样的
+}
+
+//定义登陆响应消息类型
+message LoginResponse
+{
+   ResultCode result=1;
+    bool success=2;
+}
+
+message GetFriendListRequest
+{
+    uint32 userid=1;//32位无符号整数 无符号值可以避免误存负数， 且扩大了表示范围。
+}
+message User
+{
+    bytes name=1;
+    uint32 age=2;
+    enum Sex{
+        MAN=0;
+        WOMAN=1;
+    }
+    Sex sex=3;
+
+}
+message GetFriendListResponse
+{
+    ResultCode result=1;
+    repeated User friend_list=2;//定义了一个列表类型 repeated关键字
+}
+
+service UserServiceRpc
+{
+    //通过这个方法 对调用函数的登陆请求的函数和参数 以及返回的响应进行序列化和反序列化
+    rpc Login(LoginRequest) returns(LoginResponse);
+    rpc GetFriendLists(GetFriendListRequest) returns(GetFriendListResponse);
+}

@@ -1,0 +1,2 @@
+22:5:21=>FIRST LOG MESSAGE
+22:5:21=>../example/callee/friendservice.cc:main:44
